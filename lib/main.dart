@@ -44,8 +44,8 @@ class _MainScaffoldState extends State<MainScaffold> {
 
   final List<String> _titles = [
     'EcoCity Dashboard',
-    'Statistiques',
-    'Paramètres',
+    'Statistics',
+    'Settings',
   ];
 
   @override
@@ -70,9 +70,9 @@ class _MainScaffoldState extends State<MainScaffold> {
                   unselectedLabelTextStyle: const TextStyle(color: Colors.white38),
                   labelType: NavigationRailLabelType.all,
                   destinations: const [
-                    NavigationRailDestination(icon: Icon(Icons.dashboard), label: Text('Accueil')),
+                    NavigationRailDestination(icon: Icon(Icons.dashboard), label: Text('Homepage')),
                     NavigationRailDestination(icon: Icon(Icons.bar_chart), label: Text('Stats')),
-                    NavigationRailDestination(icon: Icon(Icons.settings), label: Text('Paramètres')),
+                    NavigationRailDestination(icon: Icon(Icons.settings), label: Text('Settings')),
                   ],
                 ),
                 const VerticalDivider(color: Colors.white12, width: 1),
@@ -103,9 +103,9 @@ class _MainScaffoldState extends State<MainScaffold> {
                 setState(() => _currentIndex = index);
               },
               items: const [
-                BottomNavigationBarItem(icon: Icon(Icons.dashboard), label: 'Accueil'),
+                BottomNavigationBarItem(icon: Icon(Icons.dashboard), label: 'Homepage'),
                 BottomNavigationBarItem(icon: Icon(Icons.bar_chart), label: 'Stats'),
-                BottomNavigationBarItem(icon: Icon(Icons.settings), label: 'Paramètres'),
+                BottomNavigationBarItem(icon: Icon(Icons.settings), label: 'Settings'),
               ],
             ),
     );
@@ -162,7 +162,7 @@ class Home extends StatelessWidget {
             ),
             const SizedBox(height: 40),
             const Text(
-              'Vue Globale',
+              'Global view',
               style: TextStyle(
                 fontSize: 18,
                 fontWeight: FontWeight.w600,
@@ -179,19 +179,19 @@ class Home extends StatelessWidget {
                     childAspectRatio: 3.5,
                     physics: const NeverScrollableScrollPhysics(),
                     children: [
-                      _buildEnergyCard('⚡', 'Électricité', '342 kWh', 0.68),
-                      _buildEnergyCard('💧', 'Eau', '128 L', 0.64),
-                      _buildEnergyCard('☀️', 'Solaire', '87 kWh', 0.58),
+                      _buildEnergyCard('⚡', 'Electricity', '342 kWh', 0.68),
+                      _buildEnergyCard('💧', 'Water', '128 L', 0.64),
+                      _buildEnergyCard('☀️', 'Solar', '87 kWh', 0.58),
                       _buildEnergyCard('🌿', 'CO₂', '210 kg', 0.52),
                     ],
                   )
                 : Column(
                     children: [
-                      _buildEnergyCard('⚡', 'Électricité', '342 kWh', 0.68),
+                      _buildEnergyCard('⚡', 'Electricity', '342 kWh', 0.68),
                       const SizedBox(height: 12),
-                      _buildEnergyCard('💧', 'Eau', '128 L', 0.64),
+                      _buildEnergyCard('💧', 'Water', '128 L', 0.64),
                       const SizedBox(height: 12),
-                      _buildEnergyCard('☀️', 'Solaire', '87 kWh', 0.58),
+                      _buildEnergyCard('☀️', 'Solar', '87 kWh', 0.58),
                       const SizedBox(height: 12),
                       _buildEnergyCard('🌿', 'CO₂', '210 kg', 0.52),
                     ],
@@ -249,8 +249,128 @@ class Page2 extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Center(
-      child: Text('Page Statistiques', style: TextStyle(color: Colors.white)),
+    final screenWidth = MediaQuery.of(context).size.width;
+    final isWide = screenWidth > 600;
+    final padding = isWide ? 48.0 : 24.0;
+
+    return SafeArea(
+      child: SingleChildScrollView(
+        padding: EdgeInsets.all(padding),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const SizedBox(height: 24),
+            const Text(
+              'Summary of the self',
+              style: TextStyle(
+                fontSize: 22,
+                fontWeight: FontWeight.bold,
+                color: Colors.white,
+              ),
+            ),
+            const SizedBox(height: 8),
+            const Text(
+              'April 2026',
+              style: TextStyle(fontSize: 14, color: Colors.white60),
+            ),
+            const SizedBox(height: 24),
+            GridView.count(
+              crossAxisCount: isWide ? 4 : 2,
+              shrinkWrap: true,
+              crossAxisSpacing: 12,
+              mainAxisSpacing: 12,
+              childAspectRatio: 1.1,
+              physics: const NeverScrollableScrollPhysics(),
+              children: [
+                _buildStatCard('⚡', 'Consumption', '342 kWh', Colors.lightGreen),
+                _buildStatCard('☀️', 'Solar', '87 kWh', Colors.amber),
+                _buildStatCard('🌿', 'CO₂ avoids', '42 kg', Colors.greenAccent),
+                _buildStatCard('💰', 'Economies', '28 €', Colors.tealAccent),
+              ],
+            ),
+            const SizedBox(height: 32),
+            const Text(
+              'Consumption by category',
+              style: TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.w600,
+                color: Colors.white,
+              ),
+            ),
+            const SizedBox(height: 16),
+            _buildBarRow('⚡ Electricity', 0.68),
+            const SizedBox(height: 12),
+            _buildBarRow('💧 Water', 0.64),
+            const SizedBox(height: 12),
+            _buildBarRow('☀️ Solar', 0.58),
+            const SizedBox(height: 12),
+            _buildBarRow('🌿 CO₂', 0.52),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildStatCard(String icon, String label, String value, Color color) {
+    return Container(
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: const Color(0xFF1A2E1C),
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(color: color.withOpacity(0.3)),
+      ),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Text(icon, style: const TextStyle(fontSize: 28)),
+          const SizedBox(height: 8),
+          Text(
+            value,
+            style: TextStyle(
+              fontSize: 20,
+              fontWeight: FontWeight.bold,
+              color: color,
+            ),
+          ),
+          const SizedBox(height: 4),
+          Text(
+            label,
+            textAlign: TextAlign.center,
+            style: const TextStyle(fontSize: 11, color: Colors.white60),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildBarRow(String label, double percent) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(label, style: const TextStyle(color: Colors.white70, fontSize: 13)),
+        const SizedBox(height: 6),
+        Row(
+          children: [
+            Expanded(
+              child: LinearProgressIndicator(
+                value: percent,
+                backgroundColor: Colors.lightGreen.withOpacity(0.15),
+                valueColor: const AlwaysStoppedAnimation<Color>(Colors.lightGreen),
+                minHeight: 8,
+              ),
+            ),
+            const SizedBox(width: 12),
+            Text(
+              '${(percent * 100).toInt()}%',
+              style: const TextStyle(
+                color: Colors.lightGreen,
+                fontSize: 13,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ],
+        ),
+      ],
     );
   }
 }
@@ -261,7 +381,7 @@ class Page3 extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return const Center(
-      child: Text('Page Paramètres', style: TextStyle(color: Colors.white)),
+      child: Text('Settings page', style: TextStyle(color: Colors.white)),
     );
   }
 }
