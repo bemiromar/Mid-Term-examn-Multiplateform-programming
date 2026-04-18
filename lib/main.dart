@@ -380,8 +380,91 @@ class Page3 extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Center(
-      child: Text('Settings page', style: TextStyle(color: Colors.white)),
+    final screenWidth = MediaQuery.of(context).size.width;
+    final isWide = screenWidth > 600;
+    final padding = isWide ? 48.0 : 24.0;
+
+    return SafeArea(
+      child: SingleChildScrollView(
+        padding: EdgeInsets.all(padding),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const SizedBox(height: 24),
+            const Text(
+              'Settings',
+              style: TextStyle(
+                fontSize: 22,
+                fontWeight: FontWeight.bold,
+                color: Colors.white,
+              ),
+            ),
+            const SizedBox(height: 8),
+            const Text(
+              'Manage your preferences',
+              style: TextStyle(fontSize: 14, color: Colors.white60),
+            ),
+            const SizedBox(height: 32),
+            _buildSectionTitle('Account'),
+            const SizedBox(height: 12),
+            _buildSettingItem(Icons.person_outline, 'Profile', 'Edit your personal info'),
+            _buildSettingItem(Icons.notifications_outlined, 'Notifications', 'Manage alerts'),
+            _buildSettingItem(Icons.language, 'Language', 'English'),
+            const SizedBox(height: 24),
+            _buildSectionTitle('Energy Preferences'),
+            const SizedBox(height: 12),
+            _buildSettingItem(Icons.solar_power, 'Solar Target', '150 kWh / month'),
+            _buildSettingItem(Icons.water_drop_outlined, 'Water Limit', '200 L / day'),
+            _buildSettingItem(Icons.co2, 'CO₂ Alert', '400 kg threshold'),
+            const SizedBox(height: 24),
+            _buildSectionTitle('App'),
+            const SizedBox(height: 12),
+            _buildSettingItem(Icons.dark_mode_outlined, 'Dark Mode', 'Enabled'),
+            _buildSettingItem(Icons.info_outline, 'About', 'EcoCity v1.0.0'),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildSectionTitle(String title) {
+    return Text(
+      title,
+      style: const TextStyle(
+        fontSize: 13,
+        fontWeight: FontWeight.w600,
+        color: Colors.lightGreen,
+        letterSpacing: 1.2,
+      ),
+    );
+  }
+
+  Widget _buildSettingItem(IconData icon, String title, String subtitle) {
+    return Container(
+      margin: const EdgeInsets.only(bottom: 10),
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+      decoration: BoxDecoration(
+        color: const Color(0xFF1A2E1C),
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(color: Colors.lightGreen.withOpacity(0.15)),
+      ),
+      child: Row(
+        children: [
+          Icon(icon, color: Colors.lightGreen, size: 22),
+          const SizedBox(width: 16),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(title, style: const TextStyle(color: Colors.white, fontSize: 14)),
+                const SizedBox(height: 2),
+                Text(subtitle, style: const TextStyle(color: Colors.white38, fontSize: 12)),
+              ],
+            ),
+          ),
+          const Icon(Icons.chevron_right, color: Colors.white24, size: 20),
+        ],
+      ),
     );
   }
 }
