@@ -154,13 +154,23 @@ class Home extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 8),
-            const Center(
-              child: Text(
-                'Smart Energy, Smarter Cities',
-                style: TextStyle(fontSize: 14, color: Colors.white60),
-              ),
-            ),
-            const SizedBox(height: 40),
+           const Center(
+  child: Text(
+    'Smart Energy, Smarter Cities',
+    style: TextStyle(fontSize: 14, color: Colors.white60),
+  ),
+),
+const SizedBox(height: 24),
+ClipRRect(
+  borderRadius: BorderRadius.circular(16),
+  child: Image.network(
+    'https://images.unsplash.com/photo-1477959858617-67f85cf4f1df?w=800',
+    height: 180,
+    width: double.infinity,
+    fit: BoxFit.cover,
+  ),
+),
+const SizedBox(height: 40),
             const Text(
               'Global view',
               style: TextStyle(
