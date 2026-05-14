@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'providers/energy_provider.dart';
 
 void main() {
   runApp(const EcoCityApp());
@@ -75,7 +77,10 @@ class _EcoCityAppState extends State<EcoCityApp> {
         ),
       ),
       themeMode: _themeMode,
-      home: const MainScaffold(),
+     home: ChangeNotifierProvider(
+        create: (_) => EnergyProvider(),
+        child: const MainScaffold(),
+      ),
     );
   }
 }
