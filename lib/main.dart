@@ -183,6 +183,7 @@ class Home extends StatelessWidget {
     final isWide = screenWidth > 600;
     final padding = isWide ? 48.0 : 24.0;
     final theme = Theme.of(context);
+    final energyProvider = Provider.of<EnergyProvider>(context);
 
     return SafeArea(
       child: SingleChildScrollView(
@@ -234,8 +235,17 @@ class Home extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 40),
-            Text('Global view', style: theme.textTheme.titleMedium),
-            const SizedBox(height: 16),
+           Text('Global view', style: theme.textTheme.titleMedium),
+const SizedBox(height: 12),
+Row(
+  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+  children: [
+    _buildScenarioButton(context, energyProvider, 'Normal', 342, 128, 87, 210),
+    _buildScenarioButton(context, energyProvider, 'Peak', 480, 190, 60, 380),
+    _buildScenarioButton(context, energyProvider, 'Eco', 180, 80, 140, 90),
+  ],
+),
+const SizedBox(height: 16),
             isWide
                 ? GridView.count(
                     crossAxisCount: 2,
@@ -245,21 +255,16 @@ class Home extends StatelessWidget {
                     childAspectRatio: 3.5,
                     physics: const NeverScrollableScrollPhysics(),
                     children: [
-                      _buildEnergyCard(context, '⚡', 'Electricity', '342 kWh', 0.68),
-                      _buildEnergyCard(context, '💧', 'Water', '128 L', 0.64),
-                      _buildEnergyCard(context, '☀️', 'Solar', '87 kWh', 0.58),
-                      _buildEnergyCard(context, '🌿', 'CO₂', '210 kg', 0.52),
+                      ...energyProvider.energyData.map((e) =>
+  _buildEnergyCard(context, e.icon, e.label, e.displayValue, e.percent),
+).toList(),
                     ],
                   )
                 : Column(
                     children: [
-                      _buildEnergyCard(context, '⚡', 'Electricity', '342 kWh', 0.68),
-                      const SizedBox(height: 12),
-                      _buildEnergyCard(context, '💧', 'Water', '128 L', 0.64),
-                      const SizedBox(height: 12),
-                      _buildEnergyCard(context, '☀️', 'Solar', '87 kWh', 0.58),
-                      const SizedBox(height: 12),
-                      _buildEnergyCard(context, '🌿', 'CO₂', '210 kg', 0.52),
+                     ...energyProvider.energyData.map((e) =>
+  _buildEnergyCard(context, e.icon, e.label, e.displayValue, e.percent),
+).toList(),
                     ],
                   ),
           ],
@@ -309,6 +314,31 @@ class Home extends StatelessWidget {
       ),
     );
   }
+  Widget _buildScenarioButton(
+    BuildContext context,
+    EnergyProvider energyProvider,
+    String label,
+    double electricity,
+    double water,
+    double solar,
+    double co2) {
+  final theme = Theme.of(context);
+  return ElevatedButton(
+    onPressed: () {
+      energyProvider.updateConsumption('Electricity', electricity);
+      energyProvider.updateConsumption('Water', water);
+      energyProvider.updateConsumption('Solar', solar);
+      energyProvider.updateConsumption('CO₂', co2);
+    },
+    style: ElevatedButton.styleFrom(
+      backgroundColor: theme.cardColor,
+      foregroundColor: theme.colorScheme.primary,
+      side: BorderSide(color: theme.colorScheme.primary.withValues(alpha: 0.5)),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+    ),
+    child: Text(label),
+  );
+}
 }
 
 class Page2 extends StatelessWidget {
