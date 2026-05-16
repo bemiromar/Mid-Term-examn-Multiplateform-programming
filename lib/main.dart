@@ -350,6 +350,7 @@ class Page2 extends StatelessWidget {
     final isWide = screenWidth > 600;
     final padding = isWide ? 48.0 : 24.0;
     final theme = Theme.of(context);
+    final energyProvider = Provider.of<EnergyProvider>(context);
 
     return SafeArea(
       child: SingleChildScrollView(
@@ -362,7 +363,7 @@ class Page2 extends StatelessWidget {
             const SizedBox(height: 8),
             Text('April 2026', style: theme.textTheme.bodyLarge),
             const SizedBox(height: 24),
-            GridView.count(
+           GridView.count(
               crossAxisCount: isWide ? 4 : 2,
               shrinkWrap: true,
               crossAxisSpacing: 12,
@@ -370,22 +371,21 @@ class Page2 extends StatelessWidget {
               childAspectRatio: 1.1,
               physics: const NeverScrollableScrollPhysics(),
               children: [
-                _buildStatCard(context, '⚡', 'Consumption', '342 kWh', Colors.lightGreen),
-                _buildStatCard(context, '☀️', 'Solar', '87 kWh', Colors.amber),
-                _buildStatCard(context, '🌿', 'CO₂ avoids', '42 kg', Colors.greenAccent),
-                _buildStatCard(context, '💰', 'Economies', '28 €', Colors.tealAccent),
+                _buildStatCard(context, '⚡', 'Consumption', '${energyProvider.energyData[0].consumption.toInt()} kWh', Colors.lightGreen),
+                _buildStatCard(context, '☀️', 'Solar', '${energyProvider.energyData[2].consumption.toInt()} kWh', Colors.amber),
+                _buildStatCard(context, '🌿', 'CO₂ avoids', '${energyProvider.co2Avoided.toInt()} kg', Colors.greenAccent),
+                _buildStatCard(context, '💰', 'Economies', '${energyProvider.totalSavings.toInt()} €', Colors.tealAccent),
               ],
             ),
             const SizedBox(height: 32),
             Text('Consumption by category', style: theme.textTheme.titleMedium),
             const SizedBox(height: 16),
-            _buildBarRow(context, '⚡ Electricity', 0.68),
-            const SizedBox(height: 12),
-            _buildBarRow(context, '💧 Water', 0.64),
-            const SizedBox(height: 12),
-            _buildBarRow(context, '☀️ Solar', 0.58),
-            const SizedBox(height: 12),
-            _buildBarRow(context, '🌿 CO₂', 0.52),
+           ...energyProvider.energyData.map((e) => Column(
+  children: [
+    _buildBarRow(context, '${e.icon} ${e.label}', e.percent),
+    const SizedBox(height: 12),
+  ],
+)).toList(),
           ],
         ),
       ),
