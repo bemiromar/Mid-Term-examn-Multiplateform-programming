@@ -257,14 +257,14 @@ const SizedBox(height: 16),
                     children: [
                       ...energyProvider.energyData.map((e) =>
   _buildEnergyCard(context, e.icon, e.label, e.displayValue, e.percent),
-).toList(),
+),
                     ],
                   )
                 : Column(
                     children: [
                      ...energyProvider.energyData.map((e) =>
   _buildEnergyCard(context, e.icon, e.label, e.displayValue, e.percent),
-).toList(),
+),
                     ],
                   ),
           ],
@@ -385,7 +385,7 @@ class Page2 extends StatelessWidget {
     _buildBarRow(context, '${e.icon} ${e.label}', e.percent),
     const SizedBox(height: 12),
   ],
-)).toList(),
+)),
           ],
         ),
       ),

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import '../models/energy_model.dart';
 
 class EnergyProvider with ChangeNotifier {
-  List<EnergyModel> _energyData = [
+  final List<EnergyModel> _energyData = [
     EnergyModel(
       icon: '⚡',
       label: 'Electricity',
